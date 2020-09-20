@@ -9,6 +9,7 @@ import pygame
 
 class StockCountTrigger:
     def __init__(self):
+        self.channel =  pygame.mixer.Channel(0)
         self.four_stock = []
         self.last_stock = []
         self.two_one = []
@@ -52,47 +53,47 @@ class StockCountTrigger:
         if self._spawning_with(gamestate, [[4,1], [1,4]]):
             if self.four_stock:
                 sound = self.four_stock[random.randint(0, len(self.four_stock)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[1,1]]):
             if self.last_stock:
                 sound = self.last_stock[random.randint(0, len(self.last_stock)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[2,1], [1,2]]):
             if self.two_one:
                 sound = self.two_one[random.randint(0, len(self.two_one)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[2,2]]):
             if self.two_two:
                 sound = self.two_two[random.randint(0, len(self.two_two)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[3,1], [1,3]]):
             if self.three_one:
                 sound = self.three_one[random.randint(0, len(self.three_one)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[3,2], [2,3]]):
             if self.three_two:
                 sound = self.three_two[random.randint(0, len(self.three_two)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[3,3]]):
             if self.three_three:
                 sound = self.three_three[random.randint(0, len(self.three_three)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[4,2], [2,4]]):
             if self.four_two:
                 sound = self.four_two[random.randint(0, len(self.four_two)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
         if self._spawning_with(gamestate, [[4,3], [3,4]]):
             if self.four_three:
                 sound = self.four_three[random.randint(0, len(self.four_three)-1)]
-                pygame.mixer.Sound.play(sound)
+                self.channel.queue(sound)
 
     def _spawning_with(self, gamestate, stock_count):
         """Check to see if the stock count just became the given count"""
