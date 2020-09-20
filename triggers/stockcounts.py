@@ -10,103 +10,49 @@ import pygame
 class StockCountTrigger:
     def __init__(self):
         self.channel =  pygame.mixer.Channel(0)
-        self.four_stock = []
-        self.last_stock = []
-        self.two_one = []
-        self.two_two = []
-        self.three_one = []
-        self.three_two = []
-        self.three_three = []
-        self.four_two = []
-        self.four_three = []
-
-        path = "clips/stockcounts/4-1/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.four_stock.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/1-1/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.last_stock.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/2-1/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.two_one.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/2-2/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.two_two.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/3-1/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.three_one.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/3-2/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.three_two.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/3-3/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.three_three.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/4-2/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.four_two.append(pygame.mixer.Sound(path+file))
-        path = "clips/stockcounts/4-3/"
-        for file in [f for f in listdir(path) if isfile(join(path, f))]:
-            self.four_three.append(pygame.mixer.Sound(path+file))
+        # string -> list of pygame sounds
+        self.sounds = {}
+        self.categories = ["1-1", "2-1", "2-2", "3-1", "3-2", "3-3", "4-1", "4-2", "4-3"]
+        for category in self.categories:
+            self._collect_sounds(category)
 
     def check(self, gamestate):
         # Perform all the checks here!
-        if self._spawning_with(gamestate, [[4,1], [1,4]]):
-            if self.four_stock:
-                sound = self.four_stock[random.randint(0, len(self.four_stock)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[1,1]]):
-            if self.last_stock:
-                sound = self.last_stock[random.randint(0, len(self.last_stock)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[2,1], [1,2]]):
-            if self.two_one:
-                sound = self.two_one[random.randint(0, len(self.two_one)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[2,2]]):
-            if self.two_two:
-                sound = self.two_two[random.randint(0, len(self.two_two)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[3,1], [1,3]]):
-            if self.three_one:
-                sound = self.three_one[random.randint(0, len(self.three_one)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[3,2], [2,3]]):
-            if self.three_two:
-                sound = self.three_two[random.randint(0, len(self.three_two)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[3,3]]):
-            if self.three_three:
-                sound = self.three_three[random.randint(0, len(self.three_three)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[4,2], [2,4]]):
-            if self.four_two:
-                sound = self.four_two[random.randint(0, len(self.four_two)-1)]
-                self.channel.queue(sound)
-
-        if self._spawning_with(gamestate, [[4,3], [3,4]]):
-            if self.four_three:
-                sound = self.four_three[random.randint(0, len(self.four_three)-1)]
-                self.channel.queue(sound)
+        for category in self.categories:
+            if self._spawning_with(gamestate, category):
+                sounds = self.sounds[category]
+                if sounds:
+                    self.channel.queue(random.choice(sounds))
 
     def _spawning_with(self, gamestate, stock_count):
-        """Check to see if the stock count just became the given count"""
+        """Check to see if the stock count just became the given count
+
+        stock_count (string): One of the string categories in self.categories
+        """
         # Only relevant for 1v1
         if len(gamestate.player) != 2:
             return False
+
+        target_stocks = []
+        for part in stock_count.split("-"):
+            target_stocks.append(int(part))
+
+        target_stocks = [target_stocks, target_stocks[::-1]]
+
         stocks = []
         on_halo_platform = False
         for _, player in gamestate.player.items():
             stocks.append(player.stock)
             if player.action == melee.Action.ON_HALO_DESCENT and player.action_frame == 1:
                 on_halo_platform = True
-        if on_halo_platform and stocks in stock_count:
+        if on_halo_platform and stocks in target_stocks:
             return True
 
         return False
+
+    def _collect_sounds(self, category):
+        """Collect all the available clips for a given category"""
+        self.sounds[category] = []
+        path = "clips/stockcounts/" + category + "/"
+        for file in [f for f in listdir(path) if isfile(join(path, f))]:
+            self.sounds[category].append(pygame.mixer.Sound(path+file))
