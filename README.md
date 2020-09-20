@@ -6,6 +6,20 @@ Auto-commentary program for your Melee netplay matches, powered by libmelee.
 
 RoboToph is a trigger-based system that plays audio clips when defined in-game events occur. For example, a clip can play "You hate to see it..." when someone misses a ledge dash, or "Nice back air" when someone gets a kill off a bair.
 
+## How to Use
+
+Install the dependencies:
+
+`pip install -r requirements.txt`
+
+Start your Slippi dolphin, and then run:
+
+`./robotoph.py`
+
+That's it.
+
+If you're reading this before spectator mode is out, then just hang tight until it is. This will not work without the spectator server feature.
+
 ## How to Add a Clip
 
 Simply record an audio clip (in OGG or lossless WAV format) and drop it in the right folder in `clips/`. RoboToph will pick a clip from the right folder at random during the game.
