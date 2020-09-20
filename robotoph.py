@@ -7,7 +7,6 @@ import fnmatch
 import melee
 import pygame
 
-
 pygame.init()
 console = melee.Console(slippi_address='127.0.0.1',
                         slippi_port=51441)

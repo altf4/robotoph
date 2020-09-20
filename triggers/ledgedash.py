@@ -9,7 +9,7 @@ import pygame
 
 class LedgeDashTrigger:
     def __init__(self):
-        self.channel =  pygame.mixer.Channel(0)
+        self.channel = pygame.mixer.Channel(0)
         self.player = {
             1: 0,
             2: 0,
@@ -28,8 +28,7 @@ class LedgeDashTrigger:
         # Perform all the checks here!
         if self._is_missed(gamestate):
             if self.missed_ledgedash:
-                sound = self.missed_ledgedash[random.randint(0, len(self.missed_ledgedash)-1)]
-                self.channel.queue(sound)
+                self.channel.queue(random.choice(self.missed_ledgedash))
 
     def _is_missed(self, gamestate):
         """Check to see if someone just missed a ledge dash
@@ -45,22 +44,22 @@ class LedgeDashTrigger:
         for port, player in gamestate.player.items():
             if player.on_ground:
                 self.player[port] = 0
-                return False
+                continue
             if player.action in [melee.Action.EDGE_CATCHING, melee.Action.EDGE_HANGING]:
                 self.player[port] = 1
-                return False
+                continue
             # Must be in phase 1 or later to proceed
             if self.player[port] >= 1:
                 if player.action in [melee.Action.FALLING,
                                      melee.Action.FALLING_FORWARD,
                                      melee.Action.FALLING_BACKWARD]:
                     self.player[port] = 2
-                    return False
+                    continue
                 # Must be in phase 2 or later to proceed
                 if self.player[port] >= 2:
                     if player.action in [melee.Action.AIRDODGE]:
                         self.player[port] = 3
-                        return False
+                        continue
                     # Must be in phase 3 or later to proceed
                     if self.player[port] >= 3:
                         if player.action in [melee.Action.DEAD_FALL] and player.y < -5:
