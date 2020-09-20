@@ -1,6 +1,6 @@
 # RoboToph
 
-Auto-commentary program for Melee, powered by libmelee.
+Auto-commentary program for your Melee netplay matches, powered by libmelee.
 
 ## Nice Back Air!
 
