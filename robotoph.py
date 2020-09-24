@@ -6,6 +6,7 @@ import fnmatch
 
 import melee
 import pygame
+from stats import Stats
 
 pygame.init()
 console = melee.Console(slippi_address='127.0.0.1',
@@ -33,7 +34,12 @@ def load_all_triggers():
 
 load_all_triggers()
 
+# Running stats for the game
+stats = Stats()
+
 while True:
     gamestate = console.step()
+    stats.process(gamestate)
+
     for trigger in triggers:
         trigger.check(gamestate)
