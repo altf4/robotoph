@@ -33,7 +33,7 @@ class EdgeGuardTrigger:
         for file in [f for f in listdir(path) if isfile(join(path, f))]:
             self.opportunity_sounds.append(pygame.mixer.Sound(path+file))
 
-    def check(self, gamestate):
+    def check(self, gamestate, stats):
         # Perform all the checks here!
 
         # Only works on the 6 tournament stages

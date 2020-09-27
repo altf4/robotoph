@@ -16,7 +16,7 @@ class StockCountTrigger:
         for category in self.categories:
             self._collect_sounds(category)
 
-    def check(self, gamestate):
+    def check(self, gamestate, stats):
         # Perform all the checks here!
         for category in self.categories:
             if self._spawning_with(gamestate, category):

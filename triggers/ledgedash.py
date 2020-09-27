@@ -24,7 +24,7 @@ class LedgeDashTrigger:
         for file in [f for f in listdir(path) if isfile(join(path, f))]:
             self.missed_ledgedash.append(pygame.mixer.Sound(path+file))
 
-    def check(self, gamestate):
+    def check(self, gamestate, stats):
         # Perform all the checks here!
         if self._is_missed(gamestate):
             if self.missed_ledgedash:

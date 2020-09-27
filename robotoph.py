@@ -42,4 +42,4 @@ while True:
     stats.process(gamestate)
 
     for trigger in triggers:
-        trigger.check(gamestate)
+        trigger.check(gamestate, stats)

@@ -16,7 +16,7 @@ class MarthTrigger:
         for file in [f for f in listdir(path) if isfile(join(path, f))]:
             self.tipper_sounds.append(pygame.mixer.Sound(path+file))
 
-    def check(self, gamestate):
+    def check(self, gamestate, stats):
         # Perform all the checks here!
         if not self.channel.get_busy() and self._monster_tipper(gamestate):
             if self.tipper_sounds:
@@ -25,7 +25,7 @@ class MarthTrigger:
     def _monster_tipper(self, gamestate):
         """Did we just see a monster tipper?
         """
-        # Two conditions need to be true. Marth fsmashing and opponent with high
+        # Two conditions need to be true. Marth fsmashing and opponent with high hitstun
         halfway_there = False
         for port, player in gamestate.player.items():
             if player.character == melee.Character.MARTH and \

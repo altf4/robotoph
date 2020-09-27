@@ -10,6 +10,10 @@ class Stats:
         self._latest_frame = -124
         self._last_gamestate = None
         self.current_combo = None
+        self.neutral_wins = {
+            1: 0,
+            2: 0,
+        }
 
     def process(self, gamestate):
         self._latest_frame = gamestate.frame
@@ -18,9 +22,7 @@ class Stats:
             if self._last_gamestate and port in self._last_gamestate.player:
                 self.input_count[port] += self._count_inputs(self._last_gamestate.player[port].controller_state,
                                                        player.controller_state)
-
         self.calculateCombo(gamestate)
-
         # Do this last
         if self._latest_frame == -123:
             self.input_count = {
@@ -30,7 +32,6 @@ class Stats:
                 4: 0
             }
         self._last_gamestate = gamestate
-
 
     def calculateCombo(self, gamestate):
         # Don't bother frame 1
@@ -47,10 +48,14 @@ class Stats:
         for i in range(2):
             is_damaged = 0x4B <= gamestate.player[i+1].action.value <= 0x5B
             is_grabbed = 0xDF <= gamestate.player[i+1].action.value <= 0xE8
+            is_teching = 0xC7 <= gamestate.player[i+1].action.value <= 0xCC
+            is_downed = 0xB7 <= gamestate.player[i+1].action.value <= 0xC6
+
             damage_taken = gamestate.player[i+1].percent - self._last_gamestate.player[i+1].percent
 
-            if is_damaged or is_grabbed:
+            if is_damaged or is_grabbed or is_teching or is_downed:
                 if self.current_combo:
+                    self.current_combo["duration"] += 1
                     self.current_combo["reset_counter"] = 0
                     self.current_combo["damage"] = gamestate.player[i+1].percent - self.current_combo["starting_damage"]
                 else:
@@ -59,10 +64,13 @@ class Stats:
                         "hits": 0,
                         "reset_counter": 0,
                         "damage": damage_taken,
+                        "duration": 0,
                         "starting_damage": self._last_gamestate.player[i+1].percent
                     }
+                    self.neutral_wins[2-i] += 1
             else:
                 if self.current_combo:
+                    self.current_combo["duration"] += 1
                     self.current_combo["reset_counter"] += 1
                     if self.current_combo["reset_counter"] > 45:
                         self.current_combo = None
@@ -97,7 +105,6 @@ class Stats:
                 count += 1
 
         # TODO shoulder analog
-
         return count
 
     def _region(self, x, y):
