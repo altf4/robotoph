@@ -28,13 +28,14 @@ class MarthTrigger:
         # Two conditions need to be true. Marth fsmashing and opponent with high hitstun
         halfway_there = False
         for port, player in gamestate.player.items():
+            is_damaged = 0x4B <= player.action.value <= 0x5B
             if player.character == melee.Character.MARTH and \
                 player.action == melee.Action.FSMASH_MID:
                 if halfway_there:
                     return True
                 else:
                     halfway_there = True
-            if player.hitstun_frames_left > 75:
+            if player.hitstun_frames_left > 75 and is_damaged:
                 if halfway_there:
                     return True
                 else:
