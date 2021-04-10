@@ -44,7 +44,7 @@ class Combos:
                     return True
         if category == "big":
             if stats.current_combo:
-                if 40 < stats.current_combo ["damage"] < 60 and self._damage_last_frame <= 40:
+                if 40 < stats.current_combo["damage"] < 60 and self._damage_last_frame <= 40:
                     return True
         if category == "medium":
             if stats.current_combo:

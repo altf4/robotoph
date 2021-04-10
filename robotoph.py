@@ -3,6 +3,7 @@ import os
 import imp
 import inspect
 import fnmatch
+import json
 
 import melee
 import pygame
@@ -33,6 +34,13 @@ def load_all_triggers():
                         triggers.append(obj())
 
 load_all_triggers()
+
+# # Load config
+# config = None
+# with open("config.json") as f:
+#     config = json.load(f)
+#
+# print(config)
 
 # Running stats for the game
 stats = Stats()

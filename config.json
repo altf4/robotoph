@@ -1,0 +1,7 @@
+{"sounds": [
+  {"name": "back_to_the_lab.ogg", "hype": 2, "frequency", 100},
+  {"name": "gotta_make_them.ogg", "hype": 3},
+  {"name": "hate_to_see_it.ogg", "hype": 2},
+  {"name": "we_take_those.ogg", "hype": 3}
+],
+"global_frequency": 100.0}
