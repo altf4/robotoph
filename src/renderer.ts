@@ -4,8 +4,10 @@
 // nodeIntegration is set to true in webPreferences.
 // Use preload.js to selectively enable features
 // needed in the renderer process.
-import { Howl } from 'howler';
+// import { Howl } from 'howler';
 // const {Howl, Howler} = require('howler');
+
+declare var Howl: any;
 
 const testButton = document.getElementById("testbutton");
 if (testButton !== null) {
@@ -31,3 +33,5 @@ async function playAudio() {
   });
   sound.play();
 }
+
+playAudio()
