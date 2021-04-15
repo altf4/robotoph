@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start-typescript",
-  "version": "1.0.0",
-  "description": "A minimal Electron application written with Typescript",
+  "name": "robotoph",
+  "version": "0.0.1",
+  "description": "Autocommentary program for games of Melee",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -10,21 +10,21 @@
   },
   "repository": "https://github.com/electron/electron-quick-start-typescript",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo",
-    "typescript"
+    "Slippi",
+    "Melee",
+    "commentary"
   ],
   "author": "AltF4",
   "license": "GPLv3",
   "devDependencies": {
+    "@slippi/slippi-js": "^5.1.1",
     "@types/howler": "^2.2.2",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
+    "@vinceau/slp-realtime": "^3.1.1",
     "electron": "^9.4.4",
     "eslint": "^7.3.1",
+    "rxjs": "^6.5.4",
     "typescript": "^3.9.5"
   },
   "dependencies": {

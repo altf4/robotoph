@@ -9,17 +9,19 @@ window.addEventListener("DOMContentLoaded", () => {
       element.innerText = text;
     }
   };
-
-  for (const type of ["chrome", "node", "electron"]) {
-    replaceText(`${type}-version`, process.versions[type as keyof NodeJS.ProcessVersions]);
-  }
 });
 
-// Incoming message from the sandboxed code
-window.addEventListener('message', (event) => {
-  try {
-    ipcRenderer.send('ipc', event.data);  // Send message to main process
-  } catch (err) {
-    console.error(err);
-  }
+ipcRenderer.on('disconnected-event', (event, ...args) => {
+  document.getElementById("connected-label").style.visibility= 'hidden';
+  document.getElementById("disconnected-label").style.visibility= 'visible';
+
+});
+
+ipcRenderer.on('connected-event', (event, ...args) => {
+  document.getElementById("connected-label").style.visibility= 'visible';
+  document.getElementById("disconnected-label").style.visibility= 'hidden';
+});
+
+ipcRenderer.on('play-clip', (event, ...args) => {
+  window.postMessage(args, "file://");
 });

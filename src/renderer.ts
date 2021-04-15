@@ -4,34 +4,26 @@
 // nodeIntegration is set to true in webPreferences.
 // Use preload.js to selectively enable features
 // needed in the renderer process.
-// import { Howl } from 'howler';
-// const {Howl, Howler} = require('howler');
 
 declare var Howl: any;
 
-const testButton = document.getElementById("testbutton");
-if (testButton !== null) {
-  console.log("here");
-  testButton.onclick = playAudio;
-}
+window.addEventListener("message", (event) => {
+  playClip(event.data.toString());
+});
 
-async function playAudio() {
-  console.log("nice");
-  window.postMessage("WOOOOO", '*');
-
+async function playClip(clip: string) {
+  console.log("Playing clip: " + clip);
   var sound = new Howl({
-    src: ["clips/character_specific/marth/monster_tipper/monster_tipper.ogg"],
+    src: [clip],
     onend: function() {
-      console.log('Finished!');
+      console.log('Finished clip');
     },
     onplayerror: function() {
-      console.log('Play error!');
+      console.log('Play error! ');
     },
     onloaderror: function(id: any, error: any) {
-      console.log('Load error!' + id + ": " + error);
+      console.log('Load error! ' + id + ": " + error);
     }
   });
   sound.play();
 }
-
-playAudio()
