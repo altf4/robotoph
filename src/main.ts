@@ -2,12 +2,21 @@ import { app, BrowserWindow } from "electron";
 import * as path from "path";
 const { ipcMain } = require('electron');
 import { DolphinConnection, Ports, ConnectionEvent, ConnectionStatus } from '@slippi/slippi-js';
+const fs = require('fs');
 
 var dolphinConnection = new DolphinConnection();
 var mainWindow: any = null
 
+// Plays a specific clip
 function playClip(clip: string) {
   mainWindow.webContents.send('play-clip', clip);
+}
+
+// Plays a random clip from the given folder
+function playRandomClip(clipDir: string) {
+  var clips = fs.readdirSync(clipDir);
+  var selected = clips[Math.floor(Math.random() * clips.length)];
+  mainWindow.webContents.send('play-clip', clipDir + selected);
 }
 
 dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, status => {
@@ -17,7 +26,8 @@ dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, status => {
   }
   if (status === ConnectionStatus.CONNECTED) {
     mainWindow.webContents.send('connected-event', 'connected');
-    playClip('clips/combos/big/huge_damage.ogg');
+    // playClip('clips/combos/big/huge_damage.ogg');
+    playRandomClip('clips/startup/');
   }
 });
 
