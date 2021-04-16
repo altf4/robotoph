@@ -28,6 +28,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "howler": "^2.2.1"
+    "howler": "^2.2.1",
+    "lodash": "^4.17.21"
   }
 }

@@ -7,23 +7,32 @@
 
 declare var Howl: any;
 
+// Are we in the middle of playing a clip now?
+var playingClip = false;
+
 window.addEventListener("message", (event) => {
   playClip(event.data.toString());
 });
 
 async function playClip(clip: string) {
-  console.log("Playing clip: " + clip);
-  var sound = new Howl({
-    src: [clip],
-    onend: function() {
-      console.log('Finished clip');
-    },
-    onplayerror: function() {
-      console.log('Play error! ');
-    },
-    onloaderror: function(id: any, error: any) {
-      console.log('Load error! ' + id + ": " + error);
-    }
-  });
-  sound.play();
+  if (!playingClip) {
+    console.log("Playing clip: " + clip);
+    var sound = new Howl({
+      src: [clip],
+      onend: function() {
+        console.log('Finished clip');
+        playingClip = false;
+      },
+      onplayerror: function() {
+        console.log('Play error! ');
+        playingClip = false;
+      },
+      onloaderror: function(id: any, error: any) {
+        console.log('Load error! ' + id + ": " + error);
+        playingClip = false;
+      }
+    });
+    playingClip = true;
+    sound.play();
+  }
 }
