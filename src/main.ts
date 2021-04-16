@@ -1,10 +1,12 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 const { ipcMain } = require('electron');
-import { DolphinConnection, Ports, ConnectionEvent, ConnectionStatus } from '@slippi/slippi-js';
+import { SlpParser, DolphinConnection, Ports, ConnectionEvent, ConnectionStatus, DolphinMessageType, Command, SlpCommandEventPayload, SlpParserEvent, FrameEntryType, SlpStream, SlpStreamEvent } from '@slippi/slippi-js';
 const fs = require('fs');
 
 var dolphinConnection = new DolphinConnection();
+var parser = new SlpParser();
+var slpStream = new SlpStream();
 var mainWindow: any = null
 
 // Plays a specific clip
@@ -19,6 +21,15 @@ function playRandomClip(clipDir: string) {
   mainWindow.webContents.send('play-clip', clipDir + selected);
 }
 
+slpStream.on(SlpStreamEvent.COMMAND, (event: SlpCommandEventPayload) => {
+  // console.log("Commmand parsed by SlpStream: " + event.command + event.payload)
+  parser.handleCommand(event.command, event.payload);
+});
+
+parser.on(SlpParserEvent.FINALIZED_FRAME, (frameEntry: FrameEntryType) => {
+  console.log(frameEntry.players[1].post.positionY);
+});
+
 dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, status => {
   // Disconnect from Slippi server when we disconnect from Dolphin
   if (status === ConnectionStatus.DISCONNECTED) {
@@ -26,13 +37,20 @@ dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, status => {
   }
   if (status === ConnectionStatus.CONNECTED) {
     mainWindow.webContents.send('connected-event', 'connected');
-    // playClip('clips/combos/big/huge_damage.ogg');
     playRandomClip('clips/startup/');
   }
 });
 
-dolphinConnection.on(ConnectionEvent.MESSAGE, (message) => {
-  // this._handleGameData();
+dolphinConnection.on(ConnectionEvent.MESSAGE, (message: any) => {
+  switch (message.type) {
+    case DolphinMessageType.CONNECT_REPLY:
+      console.log("Connected: " + message);
+      break;
+    case DolphinMessageType.GAME_EVENT:
+      var decoded = Buffer.from(message.payload, 'base64')
+      slpStream.write(decoded);
+      break;
+  }
 });
 
 dolphinConnection.on(ConnectionEvent.ERROR, (err) => {
