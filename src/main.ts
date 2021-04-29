@@ -4,6 +4,8 @@ const { ipcMain } = require('electron');
 import { SlpParser, DolphinConnection, Ports, ConnectionEvent, ConnectionStatus, DolphinMessageType, Command, SlpCommandEventPayload, SlpParserEvent, FrameEntryType, SlpStream, SlpStreamEvent } from '@slippi/slippi-js';
 const fs = require('fs');
 import { StockCount } from "./triggers/stockcounts";
+import { LedgeDash } from "./triggers/ledgedash";
+import { EdgeGuard } from "./triggers/edgeguard";
 
 var dolphinConnection = new DolphinConnection();
 var parser = new SlpParser();
@@ -30,6 +32,14 @@ slpStream.on(SlpStreamEvent.COMMAND, (event: SlpCommandEventPayload) => {
 parser.on(SlpParserEvent.FINALIZED_FRAME, (frameEntry: FrameEntryType) => {
   // console.log(frameEntry.players[1].post.positionY);
   var clip = StockCount(frameEntry);
+  if (clip !== null) {
+    playRandomClip(clip);
+  }
+  clip = LedgeDash(frameEntry);
+  if (clip !== null) {
+    playRandomClip(clip);
+  }
+  clip = EdgeGuard(frameEntry);
   if (clip !== null) {
     playRandomClip(clip);
   }

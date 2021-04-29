@@ -2,7 +2,7 @@ import { FrameEntryType } from '@slippi/slippi-js';
 const _ = require("lodash");
 
 // Returns the clip (dir) to play, or null if no clip to play
-export function StockCount (frameEntry: FrameEntryType): string | null {
+export function StockCount(frameEntry: FrameEntryType): string | null {
   var clip: string = null
   var highStock: number = 0
   var lowStock: number = 0

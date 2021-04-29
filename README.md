@@ -1,6 +1,6 @@
 # RoboToph
 
-Auto-commentary program for your Melee netplay matches, powered by libmelee.
+Auto-commentary program for your Melee netplay matches.
 
 ## Nice Back Air!
 
@@ -10,15 +10,13 @@ RoboToph is a trigger-based system that plays audio clips when defined in-game e
 
 Install the dependencies:
 
-`pip install -r requirements.txt`
+`npm install`
 
 Start your Slippi dolphin, and then run:
 
-`./robotoph.py`
+`npm start`
 
 That's it.
-
-If you're reading this before spectator mode is out, then just hang tight until it is. This will not work without the spectator server feature.
 
 ## How to Add a Clip
 
@@ -27,13 +25,3 @@ Simply record an audio clip (in OGG or lossless WAV format) and drop it in the r
 For example, you can record a clip saying `This is looking like a 4-stock!` and then just drop it in `clips/stockcounts/4-1/`.
 
 That's all!
-
-## How to Add a Trigger
-
-This takes a minor amount of Python programming, but not much.
-
-What you need to do is make a new Python file in `triggers/`. Define a class in it that has a `self.check(gamestate)` function.
-
-Each frame of the game, your `check()` function will be called, with the current `libmelee` gamestate passed in as an argument. So you can inspect that for whatever conditions you want and play audio clips.
-
-Just check out existing trigger files for examples, it's quite simple.
